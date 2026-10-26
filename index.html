@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FCC Hub</title>
+  <meta name="description" content="One place for Favourite Child Church's apps." />
+  <meta name="theme-color" content="#17305a" />
+  <link rel="icon" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Loading -->
+  <div id="loading" class="center"><p class="muted">Loading…</p></div>
+
+  <!-- Sign in -->
+  <div id="signin" class="signin hidden">
+    <section class="signin-side">
+      <div class="brand">
+        <img src="logo.png" alt="" width="64" height="81" />
+        <span>FCC Hub</span>
+      </div>
+      <div class="signin-pitch">
+        <h1>One sign-in for <span class="yellow">every church app.</span></h1>
+        <p>Use the same email you use for the attendance app. You'll see the apps your team uses.</p>
+        <ul class="pills" aria-label="Apps in the hub">
+          <li>Attendance</li><li>First-timers</li><li>New converts</li><li>Livestream</li>
+        </ul>
+      </div>
+      <p class="small church-name"></p>
+    </section>
+
+    <section class="signin-main">
+      <form id="signin-form" class="signin-form" novalidate>
+        <h2>Sign in</h2>
+        <p class="muted">Use the email your church leader added you with.</p>
+
+        <div class="seg" role="tablist" aria-label="How to sign in">
+          <button type="button" role="tab" data-mode="code" aria-selected="true">Email code</button>
+          <button type="button" role="tab" data-mode="pw" aria-selected="false">Password</button>
+        </div>
+
+        <label class="field">Email
+          <input id="email" type="email" inputmode="email" autocomplete="email" required />
+        </label>
+
+        <label class="field hidden" id="pw-field">Password
+          <input id="password" type="password" autocomplete="current-password" />
+        </label>
+
+        <label class="field hidden" id="code-field">Code from the email
+          <input id="code" inputmode="numeric" autocomplete="one-time-code" />
+        </label>
+
+        <button class="btn primary" type="submit" id="go">Email me a code</button>
+        <button class="btn link hidden" type="button" id="resend">Send a new code</button>
+        <p id="msg" class="msg hidden" role="status"></p>
+      </form>
+    </section>
+  </div>
+
+  <!-- Not set up -->
+  <div id="nosetup" class="center hidden">
+    <div class="card narrow">
+      <h1>Not set up yet</h1>
+      <p><span id="nosetup-email">This email</span> can't use the hub yet. Ask your church admin to add it in the attendance app.</p>
+      <button class="btn primary" type="button" data-signout>Sign out</button>
+    </div>
+  </div>
+
+  <!-- Hub -->
+  <div id="hub" class="hidden">
+    <header class="top">
+      <div class="top-in">
+        <a class="brand dark" href="./">
+          <img src="logo.png" alt="" width="36" height="45" />
+          <span>FCC Hub</span>
+        </a>
+        <div class="account">
+          <span class="who"><span id="who-name"></span><span class="small muted" id="who-role"></span></span>
+          <button class="btn ghost small-btn" type="button" data-signout>Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hello">
+        <p class="eyebrow church-name"></p>
+        <h1 id="greeting">Welcome</h1>
+        <p class="muted" id="can-open"></p>
+      </section>
+
+      <h2 class="section-title">Your apps</h2>
+      <div class="tiles" id="tiles">
+
+        <article class="tile" data-app="attendance">
+          <span class="ico teal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></span>
+          <h3><a data-link="attendance">Attendance</a></h3>
+          <p>Mark who came, follow up people who missed, and see Sunday numbers.</p>
+          <div class="actions"><a class="btn soft teal" data-link="attendance">Open</a></div>
+        </article>
+
+        <article class="tile" data-app="firstTimers">
+          <span class="ico orange" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M19 8v6M16 11h6"/></svg></span>
+          <h3>First-timers</h3>
+          <p>Walk-ins scan the QR code on the table, or use the church's shared device. Approve sign-ups in Attendance.</p>
+          <div class="actions">
+            <button class="btn soft orange" type="button" data-qr="firstTimers" data-qr-title="First-timers welcome form">QR code</button>
+            <a class="btn outline" data-link="firstTimers" data-shared>Shared device</a>
+          </div>
+        </article>
+
+        <article class="tile" data-app="newConverts">
+          <span class="ico purple" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></span>
+          <h3>New converts</h3>
+          <p>Filled in on a shared iPad or phone while the team welcomes them into church.</p>
+          <div class="actions">
+            <a class="btn soft purple" data-link="newConverts" data-shared>Shared device</a>
+            <button class="btn outline" type="button" data-qr="newConverts" data-qr-title="New converts form">QR code</button>
+            <a class="btn outline" data-link="newConvertsList">Leaders' list</a>
+          </div>
+        </article>
+
+        <article class="tile" data-app="livestream">
+          <span class="ico red" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg></span>
+          <h3><a data-link="livestream">Livestream</a></h3>
+          <p>Watch the service live on Facebook and YouTube.</p>
+          <div class="actions"><a class="btn soft red" data-link="livestream">Open</a></div>
+        </article>
+
+      </div>
+      <p class="muted empty hidden" id="no-apps">No apps are switched on for your role yet. Ask your church admin.</p>
+    </main>
+  </div>
+
+  <!-- QR code -->
+  <dialog id="qr" aria-labelledby="qr-title">
+    <div class="qr-sheet">
+      <div class="qr-print">
+        <img src="logo.png" alt="" width="56" height="71" class="qr-logo" />
+        <h2 id="qr-title">QR code</h2>
+        <p class="qr-ask">Scan with your phone camera</p>
+        <div id="qr-img" class="qr-img" role="img" aria-label="QR code"></div>
+        <p class="qr-url" id="qr-url"></p>
+      </div>
+      <div class="qr-actions">
+        <button class="btn primary" type="button" id="qr-print">Print</button>
+        <button class="btn outline" type="button" id="qr-copy">Copy link</button>
+        <button class="btn link" type="button" id="qr-close">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
