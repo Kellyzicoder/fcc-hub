@@ -7,7 +7,7 @@ One home for **Favourite Child Church**'s apps, like the Microsoft 365 start pag
 | Attendance | fcc-welcome.vercel.app/app |
 | First-timers (welcome form) | fcc-welcome.vercel.app |
 | New converts | fcc-new-converts.vercel.app |
-| Livestream report | live.fcchq.workers.dev/report |
+| Livestream | live.fcchq.workers.dev |
 
 ## How it works
 
