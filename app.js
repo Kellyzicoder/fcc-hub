@@ -98,7 +98,7 @@ function sharedLink(url) {
 }
 
 function fillLinks() {
-  const newTab = settings.open === "new";
+  const newTab = settings.open !== "same"; // new tab unless this device chose same tab
   document.querySelectorAll("[data-link]").forEach((a) => {
     const url = cfg.links[a.dataset.link];
     a.href = a.hasAttribute("data-shared") ? sharedLink(url) : url;
@@ -111,16 +111,6 @@ function fillLinks() {
     }
   });
 }
-
-// "Open form" is for a shared iPad or phone. In the same tab, replace the hub page instead of adding to
-// the history, so a visitor pressing Back can't land in the leader's signed-in hub.
-document.querySelectorAll("a[data-shared]").forEach((a) =>
-  a.addEventListener("click", (e) => {
-    if (a.target === "_blank" || e.metaKey || e.ctrlKey || e.shiftKey) return;
-    e.preventDefault();
-    location.replace(a.href);
-  })
-);
 
 function greeting() {
   const h = Number(new Intl.DateTimeFormat("en-NZ", { hour: "numeric", hourCycle: "h23", timeZone: "Pacific/Auckland" }).format(new Date()));
