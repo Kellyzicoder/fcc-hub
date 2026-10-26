@@ -11,7 +11,7 @@ window.FCC_CONFIG = {
     firstTimers: "https://fcc-welcome.vercel.app",                 // the welcome form (QR code on the table)
     newConverts: "https://fcc-new-converts.vercel.app",            // the new converts form
     newConvertsList: "https://fcc-new-converts.vercel.app/leaders", // leaders' list of new converts
-    livestream: "https://fcclive.vercel.app",
+    livestream: "https://live.fcchq.workers.dev/report",
   },
 
   // Which roles see which app. Roles come from the attendance app:
