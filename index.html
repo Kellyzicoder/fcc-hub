@@ -12,6 +12,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script>
+    // Apply this device's saved settings before the page shows, so there's no flash of the wrong colours.
+    try {
+      var s = JSON.parse(localStorage.getItem("fcc-hub-settings") || "{}");
+      ["theme", "accent", "text", "contrast", "reading"].forEach(function (k) { if (s[k]) document.documentElement.dataset[k] = s[k]; });
+    } catch (e) {}
+  </script>
 </head>
 <body>
   <!-- Loading -->
@@ -82,6 +89,9 @@
         </a>
         <div class="account">
           <span class="who"><span id="who-name"></span><span class="small muted" id="who-role"></span></span>
+          <button class="btn ghost small-btn icon-btn" type="button" id="open-settings" aria-label="Settings" title="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          </button>
           <button class="btn ghost small-btn" type="button" data-signout>Sign out</button>
         </div>
       </div>
@@ -153,6 +163,65 @@
         <button class="btn link" type="button" id="qr-close">Close</button>
       </div>
     </div>
+  </dialog>
+
+  <!-- Settings (saved on this device only) -->
+  <dialog id="settings" aria-labelledby="settings-title">
+    <form class="settings" method="dialog" id="settings-form">
+      <div class="settings-head">
+        <h2 id="settings-title">Settings</h2>
+        <button class="btn link" type="submit">Done</button>
+      </div>
+      <p class="hint">These are saved on this phone or computer only.</p>
+
+      <fieldset>
+        <legend>Light or dark</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="theme" value="" /><span>Match my device</span></label>
+          <label class="choice"><input type="radio" name="theme" value="light" /><span>Light</span></label>
+          <label class="choice"><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Colour</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="accent" value="" /><span><i class="dot" style="background:#17305a"></i>Navy</span></label>
+          <label class="choice"><input type="radio" name="accent" value="teal" /><span><i class="dot" style="background:#0f6b62"></i>Teal</span></label>
+          <label class="choice"><input type="radio" name="accent" value="green" /><span><i class="dot" style="background:#1d6b3f"></i>Green</span></label>
+          <label class="choice"><input type="radio" name="accent" value="purple" /><span><i class="dot" style="background:#5b2a9a"></i>Purple</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Text size</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="text" value="" /><span>Normal</span></label>
+          <label class="choice"><input type="radio" name="text" value="large" /><span style="font-size:1rem">Large</span></label>
+          <label class="choice"><input type="radio" name="text" value="xlarge" /><span style="font-size:1.125rem">Extra large</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Easier to see and read</legend>
+        <label class="switch"><span>High contrast<small>Darker text and stronger lines</small></span><input type="checkbox" name="contrast" value="high" /></label>
+        <label class="switch"><span>Easy reading<small>More space between lines and words</small></span><input type="checkbox" name="reading" value="easy" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>When I open an app</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="open" value="" /><span>Same tab</span></label>
+          <label class="choice"><input type="radio" name="open" value="new" /><span>New tab</span></label>
+        </div>
+        <p class="hint">Same tab: press Back to come back to the hub.</p>
+      </fieldset>
+
+      <div class="settings-foot">
+        <button class="btn outline" type="button" id="settings-reset">Reset to normal</button>
+        <button class="btn primary" type="submit">Done</button>
+      </div>
+    </form>
   </dialog>
 
   <script src="config.js"></script>

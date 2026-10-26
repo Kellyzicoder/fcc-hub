@@ -98,13 +98,29 @@ function sharedLink(url) {
 }
 
 function fillLinks() {
+  const newTab = settings.open === "new";
   document.querySelectorAll("[data-link]").forEach((a) => {
     const url = cfg.links[a.dataset.link];
     a.href = a.hasAttribute("data-shared") ? sharedLink(url) : url;
-    a.target = "_blank";
-    a.rel = "noopener";
+    if (newTab) {
+      a.target = "_blank";
+      a.rel = "noopener";
+    } else {
+      a.removeAttribute("target");
+      a.removeAttribute("rel");
+    }
   });
 }
+
+// "Open form" is for a shared iPad or phone. In the same tab, replace the hub page instead of adding to
+// the history, so a visitor pressing Back can't land in the leader's signed-in hub.
+document.querySelectorAll("a[data-shared]").forEach((a) =>
+  a.addEventListener("click", (e) => {
+    if (a.target === "_blank" || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    location.replace(a.href);
+  })
+);
 
 function greeting() {
   const h = Number(new Intl.DateTimeFormat("en-NZ", { hour: "numeric", hourCycle: "h23", timeZone: "Pacific/Auckland" }).format(new Date()));
@@ -153,6 +169,54 @@ async function start() {
   }
   showHub(me);
 }
+
+// ---------- Settings (saved on this device only) ----------
+
+const SETTINGS_KEY = "fcc-hub-settings";
+const LOOKS = ["theme", "accent", "text", "contrast", "reading"]; // set on <html> as data-*
+let settings = {};
+try { settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") || {}; } catch { settings = {}; }
+
+function applySettings() {
+  LOOKS.forEach((k) => {
+    if (settings[k]) document.documentElement.dataset[k] = settings[k];
+    else delete document.documentElement.dataset[k];
+  });
+  fillLinks();
+}
+
+function saveSettings() {
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* private browsing: works until the page closes */ }
+}
+
+function showSettingsForm() {
+  const f = $("settings-form");
+  ["theme", "accent", "text", "open"].forEach((k) => {
+    f.querySelectorAll(`input[name="${k}"]`).forEach((r) => (r.checked = r.value === (settings[k] || "")));
+  });
+  ["contrast", "reading"].forEach((k) => (f.elements[k].checked = !!settings[k]));
+}
+
+$("settings-form").addEventListener("change", (e) => {
+  const input = e.target;
+  if (input.type === "checkbox") settings[input.name] = input.checked ? input.value : "";
+  else settings[input.name] = input.value;
+  Object.keys(settings).forEach((k) => { if (!settings[k]) delete settings[k]; });
+  saveSettings();
+  applySettings();
+});
+
+$("settings-reset").addEventListener("click", () => {
+  settings = {};
+  saveSettings();
+  applySettings();
+  showSettingsForm();
+});
+
+$("open-settings").addEventListener("click", () => {
+  showSettingsForm();
+  $("settings").showModal();
+});
 
 // ---------- QR codes (to print and put on a table) ----------
 
