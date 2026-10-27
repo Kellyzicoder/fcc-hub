@@ -154,11 +154,16 @@ a { color: var(--link); }
 .eyebrow { font-size: .8125rem; font-weight: 700; color: rgba(255,255,255,.8); text-transform: uppercase; letter-spacing: 1px; }
 .hello h1 { font-family: "Fraunces", Georgia, serif; font-size: clamp(2rem, 4.5vw, 2.75rem); font-weight: 600; line-height: 1.1; }
 .hello p:last-child { color: rgba(255,255,255,.85); max-width: 520px; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
 .tile {
-  background: var(--card); border-radius: 26px; padding: 20px; display: flex; flex-direction: column; gap: 14px;
+  background: var(--card); border-radius: 24px; padding: 18px 20px;
+  display: grid; grid-template-columns: auto 1fr; grid-template-areas: "tag tag" "ico text" "act act"; column-gap: 14px; row-gap: 12px; align-items: center;
   box-shadow: 0 1px 2px rgba(15, 30, 56, .06), 0 8px 24px rgba(15, 30, 56, .08);
 }
+.tile .tag { grid-area: tag; }
+.tile .ico { grid-area: ico; }
+.tile .tile-text { grid-area: text; }
+.tile .actions { grid-area: act; }
 .tag { display: flex; align-items: center; gap: 6px; font-size: .8125rem; color: var(--muted); }
 .tag svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; flex: none; }
 .ico { width: 52px; height: 52px; border-radius: 50%; background: var(--seg); display: flex; align-items: center; justify-content: center; }
@@ -169,14 +174,12 @@ a { color: var(--link); }
 .tile h3 a:hover { text-decoration: underline; }
 .tile-text p { color: var(--muted); font-size: .875rem; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.btn.dark { background: #0f1e38; color: #fff; border-radius: 999px; padding: 0 20px; }
-.btn.dark:hover { background: #17305a; }
+.btn.dark { background: #1d6b3f; color: #fff; border-radius: 999px; padding: 0 20px; }
+.btn.dark:hover { background: #165632; }
 html[data-accent] .btn.dark { background: var(--accent); }
 html[data-accent] .btn.dark:hover { background: var(--accent-hover); }
 .btn.light { background: var(--seg); color: var(--ink); border-radius: 999px; padding: 0 16px; }
 .btn.light:hover { background: var(--line); }
-html[data-theme="dark"] .btn.dark { background: #eef2f7; color: #0f1e38; }
-@media (prefers-color-scheme: dark) { html:not([data-theme="light"]) .btn.dark { background: #eef2f7; color: #0f1e38; } }
 .empty { margin-top: 12px; color: var(--muted); }
 
 /* Dialogs (QR code, Settings) */
@@ -220,16 +223,16 @@ dialog::backdrop { background: rgba(10, 20, 40, .55); }
   .who { display: none; }
   .hello { margin-bottom: 22px; }
   .hello h1 { font-size: 2rem; }
-  /* Phones: two cards in a row */
-  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .tile { padding: 16px 14px; gap: 12px; border-radius: 22px; }
+  /* Phones: one wide card per row */
+  .tiles { grid-template-columns: 1fr; gap: 12px; }
+  .tile { padding: 16px; border-radius: 22px; column-gap: 12px; row-gap: 10px; }
   .tag { font-size: .75rem; }
   .ico { width: 46px; height: 46px; }
   .ico svg { width: 22px; height: 22px; }
   .tile h3 { font-size: 1.0625rem; }
   .tile-text p { font-size: .8125rem; }
-  .actions { flex-direction: column; gap: 8px; }
-  .actions .btn { width: 100%; min-height: 44px; padding: 0 8px; font-size: .875rem; }
+  .actions { gap: 8px; }
+  .actions .btn { flex: 1 1 auto; min-height: 44px; padding: 0 12px; font-size: .875rem; white-space: nowrap; }
 }
 
 /* Printing a QR code: only the code, big */
